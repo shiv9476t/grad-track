@@ -1,0 +1,12 @@
+[
+    {"name" : "KPMG",
+     "url" : "https://www.kpmgcareers.co.uk/graduate/"},
+    
+    {"name" : "Lloyds",
+     "url" : "https://www.lloydsbankinggrouptalent.com/our-opportunities/graduates/"},
+    
+    {"name" : "pwc", "url" : "https://www.pwc.co.uk/careers/early-careers/graduate.html"},
+    
+    {"name" : "barclays",
+    "url" : "https://search.jobs.barclays/graduates"}
+]
