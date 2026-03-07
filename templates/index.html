@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>GradTrack</title>
+</head>
+<body>
+    <h1>GradTrack</h1>
+    <div id="schemes-container">
+        <!-- cards will appear here -->
+    </div>
+
+    <script>
+        fetch("/schemes")
+            .then(response => response.json())
+            .then(schemes => {
+                schemes.forEach(scheme => {
+                    const card = document.createElement("div")
+                    card.innerHTML = `
+                        <h3>${scheme.company}</h3>
+                        <p>${scheme.scheme_name}</p>
+                        <p>${scheme.status}</p>
+                        <a href="${scheme.url}">Apply</a>
+                    `
+                    document.getElementById("schemes-container").appendChild(card)
+                })
+            })
+    </script>
+</body>
+</html>

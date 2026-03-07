@@ -5,6 +5,7 @@ class GradSchemeDB:
     def __init__(self, db_name="gradtrack.db"):
         self.db_name = db_name
         self.conn = sqlite3.connect(self.db_name)
+        self.conn.row_factory = sqlite3.Row #makes each row behave like a dictionary
         self.cursor = self.conn.cursor()
         self.create_grad_schemes_table()
         
@@ -35,3 +36,7 @@ class GradSchemeDB:
         except sqlite3.IntegrityError:
             pass
             #print("Duplicate job skipped")
+            
+    def get_schemes(self):
+        self.cursor.execute("SELECT * FROM grad_schemes")
+        return self.cursor.fetchall()
