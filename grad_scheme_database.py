@@ -40,3 +40,25 @@ class GradSchemeDB:
     def get_schemes(self):
         self.cursor.execute("SELECT * FROM grad_schemes")
         return self.cursor.fetchall()
+    
+    def add_industry_column(self):
+        try:
+            self.cursor.execute("ALTER TABLE grad_schemes ADD COLUMN industry TEXT")
+            self.conn.commit()
+        except:
+            print("error")
+            pass  # column already exists
+
+    def update_industry(self, scheme_name, industry):
+        self.cursor.execute("""
+        UPDATE grad_schemes SET industry = ? WHERE scheme_name = ?""",
+                           (industry, scheme_name))
+        self.conn.commit()
+    
+    def get_scheme_names(self):
+        self.cursor.execute("SELECT scheme_name FROM grad_schemes")
+        return self.cursor.fetchall()
+    
+    def clear_industries(self):
+        self.cursor.execute("UPDATE grad_schemes SET industry = NULL")
+        self.conn.commit()
