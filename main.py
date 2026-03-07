@@ -1,9 +1,8 @@
-#python3 main.py
-import json
-from scraper import Scraper
+from scrapers.pwc import PWCScraper
+from scrapers.lloyds import LloydsScraper
+from scrapers.mi5 import MI5Scraper
 
-with open("companies.json", "r") as file:
-    companies_data = json.load(file)
-    
-for company in companies_data:
-    Scraper(company["name"], company["url"]).scrape_company()
+scraper = MI5Scraper()
+schemes = scraper.scrape_grad_schemes()
+for scheme in schemes:
+    print(scheme.scheme_name, scheme.status, scheme.location, scheme.salary)
