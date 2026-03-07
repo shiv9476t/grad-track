@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup
 from urllib.parse import urljoin
 from grad_scheme import GradScheme
 
-class PWCScraper(BaseScraper):
+class PwCScraper(BaseScraper):
     def __init__(self):
         super().__init__(
         company_name = "PWC",
@@ -28,7 +28,7 @@ class PWCScraper(BaseScraper):
             href = card.find("a", href=True)["href"]
             url = urljoin(self.base_url, href)
             status = card.find("p", class_="link-read-more").get_text(strip=True)
-            scheme.append((url, status))
+            scheme_url_status.append((url, status))
 
         return scheme_url_status
     
