@@ -1,9 +1,10 @@
 from scrapers.pwc import PwCScraper
 from scrapers.lloyds import LloydsScraper
 from scrapers.mi5 import MI5Scraper
+from scrapers.civil_service import CivilServiceScraper
 from database import GradSchemeDB
 
-SCRAPERS = [PwCScraper, LloydsScraper, MI5Scraper]
+SCRAPERS = [PwCScraper, LloydsScraper, MI5Scraper, CivilServiceScraper]
 
 db = GradSchemeDB()
 

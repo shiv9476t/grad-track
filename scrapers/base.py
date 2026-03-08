@@ -40,6 +40,10 @@ class BaseScraper:
         time.sleep(self.delay)
         return soup
     
+    def get_json(self, url):
+        r = requests.get(url)
+        data = r.json()
+        return data
     
     def normalise_url(self, url):
         # Parse the URL
