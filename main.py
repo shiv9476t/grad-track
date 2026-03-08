@@ -1,6 +1,6 @@
-from scrapers.civil_service import CivilServiceScraper
+from scrapers.network_rail import NetworkRailScraper
 
-CVscraper = CivilServiceScraper()
-grad_schemes = CVscraper.scrape_grad_schemes()
+s = NetworkRailScraper()
+grad_schemes = s.scrape_grad_schemes()
 for scheme in grad_schemes:
     print(scheme.scheme_name, scheme.location, scheme.salary, scheme.status, scheme.url)
