@@ -4,9 +4,10 @@ from scrapers.mi5 import MI5Scraper
 from scrapers.civil_service import CivilServiceScraper
 from scrapers.network_rail import NetworkRailScraper
 from scrapers.grant_thornton import GrantThorntonScraper
+from scrapers.mod import MODScraper
 from database import GradSchemeDB
 
-SCRAPERS = [PwCScraper, LloydsScraper, MI5Scraper, CivilServiceScraper, NetworkRailScraper, GrantThorntonScraper]
+SCRAPERS = [PwCScraper, LloydsScraper, MI5Scraper, CivilServiceScraper, NetworkRailScraper, GrantThorntonScraper, MODScraper]
 
 db = GradSchemeDB()
 

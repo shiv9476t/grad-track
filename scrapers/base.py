@@ -71,7 +71,7 @@ class BaseScraper:
         status_lower = status.lower()
         if "open" in status_lower:
             return "Open"
-        elif "close" in status_lower:
+        elif "close" in status_lower or "not available" in status_lower:
             return "Closed"
         else:
             return "Unknown"
