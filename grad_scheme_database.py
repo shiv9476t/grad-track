@@ -41,6 +41,11 @@ class GradSchemeDB:
         self.cursor.execute("SELECT * FROM grad_schemes")
         return self.cursor.fetchall()
     
+    def get_schemes_by_industry(self, industry):
+        self.cursor.execute("SELECT * FROM grad_schemes WHERE industry LIKE ?",
+                           (f"%{industry}%",))
+        return self.cursor.fetchall()
+    
     def add_industry_column(self):
         try:
             self.cursor.execute("ALTER TABLE grad_schemes ADD COLUMN industry TEXT")
@@ -62,3 +67,8 @@ class GradSchemeDB:
     def clear_industries(self):
         self.cursor.execute("UPDATE grad_schemes SET industry = NULL")
         self.conn.commit()
+        
+#db = GradSchemeDB()
+#schemes = db.get_schemes_by_industry("Technology")
+#for row in schemes:
+#    print(row["scheme_name"])
