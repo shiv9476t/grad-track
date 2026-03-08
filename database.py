@@ -37,6 +37,17 @@ class GradSchemeDB:
             pass
             #print("Duplicate job skipped")
             
+    def upsert_grad_scheme(self, grad_scheme):
+        self.cursor.execute("""
+        INSERT INTO grad_schemes (company, scheme_name, location, salary, status, start_date, url)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
+        ON CONFLICT(url) DO UPDATE SET
+        location = excluded.location,
+        salary = excluded.salary,
+        status = excluded.status""",
+        (grad_scheme.company, grad_scheme.scheme_name, grad_scheme.location, grad_scheme.salary, grad_scheme.status, grad_scheme.start_date, grad_scheme.url))
+        self.conn.commit()
+            
     def get_schemes(self):
         self.cursor.execute("SELECT * FROM grad_schemes")
         return self.cursor.fetchall()
