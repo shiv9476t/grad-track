@@ -2,28 +2,66 @@
 <html>
 <head>
     <title>GradTrack</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body>
-    <h1>GradTrack</h1>
-    <div id="schemes-container">
+    <h1 class="text-3xl font-bold text-center mt-10">GradTrack</h1>
+    
+    <div class="flex justify-center mt-8 gap-4">
+        <select id="industry-filter" class="border border-gray-300 rounded px-4 py-2 w-64">
+            <option value="">All Industries</option>
+            <option value="Technology">Technology</option>
+            <option value="Finance">Finance</option>
+            <option value="Legal">Legal</option>
+            <option value="Consulting">Consulting</option>
+            <option value="Engineering">Engineering</option>
+        </select>
+        <button onclick="filterSchemes()" class="bg-blue-500 text-white px-4 py-2 rounded">
+            Search
+        </button>
+    </div>
+
+    <div id="schemes-container" class="mt-8">
         <!-- cards will appear here -->
     </div>
 
     <script>
-        fetch("/schemes")
-            .then(response => response.json())
-            .then(schemes => {
-                schemes.forEach(scheme => {
-                    const card = document.createElement("div")
-                    card.innerHTML = `
-                        <h3>${scheme.company}</h3>
-                        <p>${scheme.scheme_name}</p>
-                        <p>${scheme.status}</p>
-                        <a href="${scheme.url}">Apply</a>
-                    `
-                    document.getElementById("schemes-container").appendChild(card)
-                })
+        async function loadSchemes() {
+            const response = await fetch("/schemes")
+            const schemes = await response.json()
+            schemes.forEach(scheme => {
+                const card = document.createElement("div")
+                card.innerHTML = `
+                    <h3>${scheme.company}</h3>
+                    <p>${scheme.scheme_name}</p>
+                    <p>${scheme.status}</p>
+                    <a href="${scheme.url}">Apply</a>
+                `
+                document.getElementById("schemes-container").appendChild(card)
             })
+        }
+        loadSchemes()
+        
+        async function filterSchemes() {
+            const industry = document.getElementById("industry-filter").value
+            const url = industry ? `/schemes?industry=${industry}` : "/schemes"
+
+            const response = await fetch(url)
+            const schemes = await response.json()
+
+            document.getElementById("schemes-container").innerHTML = ""
+
+            schemes.forEach(scheme => {
+                const card = document.createElement("div")
+                card.innerHTML = `
+                    <h3>${scheme.company}</h3>
+                    <p>${scheme.scheme_name}</p>
+                    <p>${scheme.status}</p>
+                    <a href="${scheme.url}">Apply</a>
+                `
+                document.getElementById("schemes-container").appendChild(card)
+            })
+        }
     </script>
 </body>
 </html>
