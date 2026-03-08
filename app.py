@@ -1,5 +1,5 @@
 from flask import Flask, jsonify, render_template, request
-from grad_scheme_database import GradSchemeDB
+from database import GradSchemeDB
 
 #creates web server
 app = Flask(__name__)

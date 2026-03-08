@@ -2,7 +2,7 @@ from scrapers.base import BaseScraper
 import re
 from bs4 import BeautifulSoup
 from urllib.parse import urljoin
-from grad_scheme import GradScheme
+from models.grad_scheme import GradScheme
 
 class PwCScraper(BaseScraper):
     def __init__(self):

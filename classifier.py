@@ -1,4 +1,4 @@
-from grad_scheme_database import GradSchemeDB
+from database import GradSchemeDB
 
 db = GradSchemeDB()
 
