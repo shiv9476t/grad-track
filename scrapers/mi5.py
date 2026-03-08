@@ -37,7 +37,7 @@ class MI5Scraper(BaseScraper):
         scheme_name = soup.find("h1").get_text(strip=True)
         
         location = "Unknown"
-        salary = None
+        salary = "Unknown"
         status = None
         start_date = "Unknown"
         
@@ -54,6 +54,8 @@ class MI5Scraper(BaseScraper):
             status = "Open"
         else:
             status = "Closed"
+            
+        status = self.normalise_status(status)
                       
         grad_scheme = GradScheme(
             company=self.company_name,

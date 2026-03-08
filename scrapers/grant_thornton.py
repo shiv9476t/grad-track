@@ -37,7 +37,7 @@ class GrantThorntonScraper(BaseScraper):
         location = None
         salary = "Competitive"
         status = "Unknown"
-        start_date = None
+        start_date = "Unknown"
 
         location_match = re.search(r" - ([A-Za-z\s]+)$", scheme_name)
         location = location_match.group(1).strip() if location_match else "Unknown"
@@ -50,6 +50,8 @@ class GrantThorntonScraper(BaseScraper):
         main = soup.find("main") or soup
         apply_link = main.find("a", href=re.compile(r"apply", re.I))
         status = "Open" if apply_link else "Closed"
+        
+        status = self.normalise_status(status)
 
         return GradScheme(
             company=self.company_name,

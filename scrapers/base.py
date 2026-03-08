@@ -63,3 +63,15 @@ class BaseScraper:
         ))
         #print(normalised)
         return normalised
+    
+    @staticmethod
+    def normalise_status(status):
+        if status is None:
+            return "Unknown"
+        status_lower = status.lower()
+        if "open" in status_lower:
+            return "Open"
+        elif "close" in status_lower:
+            return "Closed"
+        else:
+            return "Unknown"

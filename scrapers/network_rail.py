@@ -38,9 +38,9 @@ class NetworkRailScraper(BaseScraper):
         scheme_name = soup.find("h1").get_text(strip=True)
 
         location = "Across the UK"
-        salary = None
+        salary = "Unknown"
         status = "Unknown"
-        start_date = None
+        start_date = "Unknown"
 
         for section in soup.find_all("section", class_="text-and-image"):
             text = section.get_text(" ", strip=True)
@@ -60,6 +60,8 @@ class NetworkRailScraper(BaseScraper):
                 status = "Closed"
             elif "now open" in text.lower():
                 status = "Open"
+                
+        status = self.normalise_status(status)
 
         return GradScheme(
             company=self.company_name,

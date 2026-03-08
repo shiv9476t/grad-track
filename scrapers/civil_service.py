@@ -78,6 +78,8 @@ class CivilServiceScraper(BaseScraper):
                 p = h2.find_next()
                 location = p.get_text(strip=True).split(".")[0]
                 
+        status = self.normalise_status(status)
+        
         grad_scheme = GradScheme(
             company=self.company_name,
             scheme_name=scheme_name,

@@ -36,9 +36,9 @@ class LloydsScraper(BaseScraper):
         scheme_name = soup.find("h1").get_text(strip=True)
         
         location = None
-        salary = None
+        salary = "Unknown"
         status = None
-        start_date = None
+        start_date = "Unknown"
         
         for item in soup.find_all("div", class_="col-12"):
             h3 = item.find("h3")
@@ -62,6 +62,8 @@ class LloydsScraper(BaseScraper):
                         status = "Closed"
                     else:
                         status = "Open"
+        
+        status = self.normalise_status(status)
                 
         grad_scheme = GradScheme(
             company=self.company_name,

@@ -36,7 +36,7 @@ class PwCScraper(BaseScraper):
         scheme_name = soup.find("h1").get_text(strip=True)
         
         location = None
-        start_date = None
+        start_date = "Unknown"
         
         for item in soup.find_all("div", class_="case-study__items"):
             heading = item.find("p", class_="case-study__item-heading").get_text(strip=True)
@@ -46,11 +46,13 @@ class PwCScraper(BaseScraper):
             elif heading == "Start date":
                 start_date = value
                 
+        status = self.normalise_status(status)
+                
         grad_scheme = GradScheme(
             company=self.company_name,
             scheme_name=scheme_name,
             location=location,
-            salary="Not published",
+            salary="Unknown",
             status=status,
             start_date=start_date,
             url=url
