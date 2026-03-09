@@ -12,9 +12,11 @@
         </div>
     </nav>
 
-    <div class="max-w-4xl mx-auto px-6">
-        <div class="flex justify-center mt-8 gap-4">
-            <select id="industry-filter" class="border border-gray-300 rounded px-4 py-2 w-64">
+    <div id="search-form" class="flex flex-col items-center justify-center mt-24 gap-6">
+        <h2 class="text-2xl font-semibold">Find your graduate scheme</h2>
+        <p class="text-gray-500 text-sm">Tell us about yourself and we'll find the best matches</p>
+        <div class="flex flex-col gap-3 w-80">
+            <select id="industry-filter" class="border border-gray-300 rounded px-4 py-2">
                 <option value="">All Industries</option>
                 <option value="Technology">Technology</option>
                 <option value="Finance">Finance</option>
@@ -22,33 +24,53 @@
                 <option value="Consulting">Consulting</option>
                 <option value="Engineering">Engineering</option>
             </select>
-            <button onclick="filterSchemes()" class="bg-blue-500 text-white px-4 py-2 rounded">
-                Search
+            <input id="university" type="text" placeholder="Your university" class="border border-gray-300 rounded px-4 py-2">
+            <input id="location" type="text" placeholder="Preferred location" class="border border-gray-300 rounded px-4 py-2">
+            <button onclick="handleSearch()" class="bg-blue-500 text-white px-4 py-2 rounded font-medium">
+                Find schemes
             </button>
         </div>
-        
+    </div>
+    
+    <div id="filter-bar" style="display:none" class="max-w-4xl mx-auto px-6 mt-8 flex gap-4 items-center">
+        <select id="industry-filter-bar" class="border border-gray-300 rounded px-4 py-2 w-64">
+            <option value="">All Industries</option>
+            <option value="Technology">Technology</option>
+            <option value="Finance">Finance</option>
+            <option value="Legal">Legal</option>
+            <option value="Consulting">Consulting</option>
+            <option value="Engineering">Engineering</option>
+        </select>
+        <button onclick="handleFilter()" class="bg-blue-500 text-white px-4 py-2 rounded">
+            Update
+        </button>
+    </div>
+    
+    <div class="max-w-4xl mx-auto px-6">
         <div id="schemes-container" class="mt-8 grid grid-cols-1 gap-4">
         </div>
     </div>
-
+    
     <script>
-        async function loadSchemes() {
-            const response = await fetch("/schemes")
-            const schemes = await response.json()
-            renderSchemes(schemes)
-        }
-        loadSchemes()
-        
-        async function filterSchemes() {
+
+        async function handleSearch() {
+            document.getElementById("search-form").style.display = "none"
+            document.getElementById("filter-bar").style.display = "flex"
             const industry = document.getElementById("industry-filter").value
             const url = industry ? `/schemes?industry=${industry}` : "/schemes"
-
             const response = await fetch(url)
             const schemes = await response.json()
-            
             renderSchemes(schemes)
         }
-        
+
+        async function handleFilter() {
+            const industry = document.getElementById("industry-filter-bar").value
+            const url = industry ? `/schemes?industry=${industry}` : "/schemes"
+            const response = await fetch(url)
+            const schemes = await response.json()
+            renderSchemes(schemes)
+        }
+
         function renderSchemes(schemes) {
             document.getElementById("schemes-container").innerHTML = ""
 
