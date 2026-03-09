@@ -79,7 +79,3 @@ class GradSchemeDB:
         self.cursor.execute("UPDATE grad_schemes SET industry = NULL")
         self.conn.commit()
         
-#db = GradSchemeDB()
-#schemes = db.get_schemes_by_industry("Technology")
-#for row in schemes:
-#    print(row["scheme_name"])
