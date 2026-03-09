@@ -29,16 +29,7 @@
         async function loadSchemes() {
             const response = await fetch("/schemes")
             const schemes = await response.json()
-            schemes.forEach(scheme => {
-                const card = document.createElement("div")
-                card.innerHTML = `
-                    <h3>${scheme.company}</h3>
-                    <p>${scheme.scheme_name}</p>
-                    <p>${scheme.status}</p>
-                    <a href="${scheme.url}">Apply</a>
-                `
-                document.getElementById("schemes-container").appendChild(card)
-            })
+            renderSchemes(schemes)
         }
         loadSchemes()
         
@@ -48,9 +39,13 @@
 
             const response = await fetch(url)
             const schemes = await response.json()
-
+            
+            renderSchemes(schemes)
+        }
+        
+        function renderSchemes(schemes) {
             document.getElementById("schemes-container").innerHTML = ""
-
+            
             schemes.forEach(scheme => {
                 const card = document.createElement("div")
                 card.innerHTML = `
@@ -62,6 +57,7 @@
                 document.getElementById("schemes-container").appendChild(card)
             })
         }
+        
     </script>
 </body>
 </html>
