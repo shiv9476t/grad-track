@@ -4,25 +4,31 @@
     <title>GradTrack</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <h1 class="text-3xl font-bold text-center mt-10">GradTrack</h1>
-    
-    <div class="flex justify-center mt-8 gap-4">
-        <select id="industry-filter" class="border border-gray-300 rounded px-4 py-2 w-64">
-            <option value="">All Industries</option>
-            <option value="Technology">Technology</option>
-            <option value="Finance">Finance</option>
-            <option value="Legal">Legal</option>
-            <option value="Consulting">Consulting</option>
-            <option value="Engineering">Engineering</option>
-        </select>
-        <button onclick="filterSchemes()" class="bg-blue-500 text-white px-4 py-2 rounded">
-            Search
-        </button>
-    </div>
+<body class="bg-gray-50">
+    <nav class="border-b border-gray-200 bg-white">
+        <div class="max-w-4xl mx-auto px-6 py-4 flex justify-between items-center">
+            <span class="text-xl font-bold">GradTrack</span>
+            <span class="text-sm text-gray-500">Find your graduate scheme</span>
+        </div>
+    </nav>
 
-    <div id="schemes-container" class="mt-8">
-        <!-- cards will appear here -->
+    <div class="max-w-4xl mx-auto px-6">
+        <div class="flex justify-center mt-8 gap-4">
+            <select id="industry-filter" class="border border-gray-300 rounded px-4 py-2 w-64">
+                <option value="">All Industries</option>
+                <option value="Technology">Technology</option>
+                <option value="Finance">Finance</option>
+                <option value="Legal">Legal</option>
+                <option value="Consulting">Consulting</option>
+                <option value="Engineering">Engineering</option>
+            </select>
+            <button onclick="filterSchemes()" class="bg-blue-500 text-white px-4 py-2 rounded">
+                Search
+            </button>
+        </div>
+        
+        <div id="schemes-container" class="mt-8 grid grid-cols-1 gap-4">
+        </div>
     </div>
 
     <script>
@@ -45,19 +51,26 @@
         
         function renderSchemes(schemes) {
             document.getElementById("schemes-container").innerHTML = ""
-            
+
             schemes.forEach(scheme => {
                 const card = document.createElement("div")
+                card.className = "bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow"
                 card.innerHTML = `
-                    <h3>${scheme.company}</h3>
-                    <p>${scheme.scheme_name}</p>
-                    <p>${scheme.status}</p>
-                    <a href="${scheme.url}">Apply</a>
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <p class="text-sm text-gray-500 font-medium">${scheme.company}</p>
+                            <h3 class="text-lg font-semibold mt-1">${scheme.scheme_name}</h3>
+                            <p class="text-sm text-gray-500 mt-2">${scheme.location} · ${scheme.salary ?? "Salary not listed"}</p>
+                        </div>
+                        <span class="${scheme.status === 'Open' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'} text-xs font-medium px-3 py-1 rounded-full">
+                            ${scheme.status}
+                        </span>
+                    </div>
+                    <a href="${scheme.url}" target="_blank" class="inline-block mt-4 text-sm text-blue-600 hover:underline">View scheme →</a>
                 `
                 document.getElementById("schemes-container").appendChild(card)
             })
         }
-        
     </script>
 </body>
 </html>
