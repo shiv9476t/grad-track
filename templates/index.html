@@ -3,59 +3,114 @@
 <head>
     <title>GradTrack</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Serif+Display&display=swap" rel="stylesheet">
+    <style>
+        body {  font-family: 'DM Sans', sans-serif;
+                background-color: #f9f9f8;
+                background-image: radial-gradient(#e5e5e5 1px, transparent 1px);
+                background-size: 24px 24px;}
+        .serif { font-family: 'DM Serif Display', serif; }
+        .form-card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05), 0 20px 40px -10px rgba(0,0,0,0.08);
+        }
+        input:focus, select:focus {
+            outline: none;
+            border-color: #1a1a1a;
+            box-shadow: 0 0 0 3px rgba(26,26,26,0.06);
+        }
+        .btn-primary {
+            background: #1a1a1a;
+            transition: all 0.15s ease;
+        }
+        .btn-primary:hover { background: #333; transform: translateY(-1px); }
+        .scheme-card {
+            transition: all 0.2s ease;
+            border: 1px solid #e5e7eb;
+        }
+        .scheme-card:hover {
+            border-color: #d1d5db;
+            box-shadow: 0 8px 24px -4px rgba(0,0,0,0.08);
+            transform: translateY(-2px);
+        }
+    </style>
 </head>
-<body class="bg-gray-50">
-    <nav class="border-b border-gray-200 bg-white">
+<body class="bg-[#f9f9f8]">
+
+    <!-- Navbar -->
+    <nav class="bg-white border-b border-gray-100">
         <div class="max-w-4xl mx-auto px-6 py-4 flex justify-between items-center">
-            <span class="text-xl font-bold">GradTrack</span>
-            <span class="text-sm text-gray-500">Find your graduate scheme</span>
+            <span class="serif text-xl tracking-tight">GradTrack</span>
+            <span class="text-xs text-gray-400 tracking-wide uppercase font-medium">Graduate Schemes UK</span>
         </div>
     </nav>
 
-    <div id="search-form" class="flex flex-col items-center justify-center mt-24 gap-6">
-        <h2 class="text-2xl font-semibold">Find your graduate scheme</h2>
-        <p class="text-gray-500 text-sm">Tell us about yourself and we'll find the best matches</p>
-        <div class="flex flex-col gap-3 w-80">
-            <select id="industry-filter" class="border border-gray-300 rounded px-4 py-2">
+    <!-- Search Form -->
+    <div id="search-form" class="flex flex-col items-center justify-center mt-20 gap-8 px-6">
+        <div class="text-center max-w-md">
+            <h1 class="serif text-4xl text-gray-900 leading-tight">Find your graduate scheme</h1>
+            <p class="text-gray-500 mt-3 text-sm leading-relaxed">We've aggregated every UK graduate scheme in one place. Tell us what you're looking for.</p>
+        </div>
+
+        <div class="form-card rounded-2xl p-8 w-full max-w-sm flex flex-col gap-5">
+            <div class="flex flex-col gap-1.5">
+                <label class="text-xs font-medium text-gray-500 uppercase tracking-wide">Industry</label>
+                <select id="industry-filter" class="border border-gray-200 rounded-lg px-4 py-2.5 text-sm bg-gray-50 text-gray-800">
+                    <option value="">All Industries</option>
+                    <option value="Technology">Technology</option>
+                    <option value="Finance">Finance</option>
+                    <option value="Engineering">Engineering</option>
+                    <option value="Legal">Legal</option>
+                    <option value="Consulting">Consulting</option>
+                </select>
+            </div>
+            <div class="flex flex-col gap-1.5">
+                <label class="text-xs font-medium text-gray-500 uppercase tracking-wide">University</label>
+                <input id="university" type="text" placeholder="e.g. Loughborough University"
+                    class="border border-gray-200 rounded-lg px-4 py-2.5 text-sm bg-gray-50 text-gray-800 placeholder-gray-400">
+            </div>
+            <div class="flex flex-col gap-1.5">
+                <label class="text-xs font-medium text-gray-500 uppercase tracking-wide">Preferred Location</label>
+                <input id="location" type="text" placeholder="e.g. London"
+                    class="border border-gray-200 rounded-lg px-4 py-2.5 text-sm bg-gray-50 text-gray-800 placeholder-gray-400">
+            </div>
+            <button onclick="handleSearch()"
+                class="btn-primary text-white px-4 py-3 rounded-lg text-sm font-medium mt-1 w-full">
+                Find schemes →
+            </button>
+        </div>
+        <p class="text-xs text-gray-400">69 schemes across 7 companies — updated daily</p>
+    </div>
+
+    <!-- Filter Bar -->
+    <div id="filter-bar" style="display:none" class="max-w-4xl mx-auto px-6 mt-10">
+        <div class="flex gap-3 items-center pb-6 border-b border-gray-200">
+            <select id="industry-filter-bar" class="border border-gray-200 rounded-lg px-4 py-2 text-sm bg-white text-gray-800 w-56">
                 <option value="">All Industries</option>
                 <option value="Technology">Technology</option>
                 <option value="Finance">Finance</option>
+                <option value="Engineering">Engineering</option>
                 <option value="Legal">Legal</option>
                 <option value="Consulting">Consulting</option>
-                <option value="Engineering">Engineering</option>
             </select>
-            <input id="university" type="text" placeholder="Your university" class="border border-gray-300 rounded px-4 py-2">
-            <input id="location" type="text" placeholder="Preferred location" class="border border-gray-300 rounded px-4 py-2">
-            <button onclick="handleSearch()" class="bg-blue-500 text-white px-4 py-2 rounded font-medium">
-                Find schemes
+            <button onclick="handleFilter()"
+                class="btn-primary text-white px-4 py-2 rounded-lg text-sm font-medium">
+                Update
             </button>
+            <span id="scheme-count" class="text-sm text-gray-400 ml-auto"></span>
         </div>
     </div>
-    
-    <div id="filter-bar" style="display:none" class="max-w-4xl mx-auto px-6 mt-8 flex gap-4 items-center">
-        <select id="industry-filter-bar" class="border border-gray-300 rounded px-4 py-2 w-64">
-            <option value="">All Industries</option>
-            <option value="Technology">Technology</option>
-            <option value="Finance">Finance</option>
-            <option value="Legal">Legal</option>
-            <option value="Consulting">Consulting</option>
-            <option value="Engineering">Engineering</option>
-        </select>
-        <button onclick="handleFilter()" class="bg-blue-500 text-white px-4 py-2 rounded">
-            Update
-        </button>
-    </div>
-    
-    <div class="max-w-4xl mx-auto px-6">
-        <div id="schemes-container" class="mt-8 grid grid-cols-1 gap-4">
-        </div>
-    </div>
-    
-    <script>
 
+    <!-- Cards -->
+    <div class="max-w-4xl mx-auto px-6">
+        <div id="schemes-container" class="mt-6 grid grid-cols-1 gap-3 pb-16"></div>
+    </div>
+
+    <script>
         async function handleSearch() {
             document.getElementById("search-form").style.display = "none"
-            document.getElementById("filter-bar").style.display = "flex"
+            document.getElementById("filter-bar").style.display = "block"
             const industry = document.getElementById("industry-filter").value
             const url = industry ? `/schemes?industry=${industry}` : "/schemes"
             const response = await fetch(url)
@@ -73,22 +128,25 @@
 
         function renderSchemes(schemes) {
             document.getElementById("schemes-container").innerHTML = ""
+            document.getElementById("scheme-count").textContent = `${schemes.length} schemes found`
 
             schemes.forEach(scheme => {
                 const card = document.createElement("div")
-                card.className = "bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow"
+                card.className = "scheme-card bg-white rounded-xl p-5"
                 card.innerHTML = `
                     <div class="flex justify-between items-start">
-                        <div>
-                            <p class="text-sm text-gray-500 font-medium">${scheme.company}</p>
-                            <h3 class="text-lg font-semibold mt-1">${scheme.scheme_name}</h3>
-                            <p class="text-sm text-gray-500 mt-2">${scheme.location} · ${scheme.salary ?? "Salary not listed"}</p>
+                        <div class="flex-1 min-w-0 pr-4">
+                            <p class="text-xs text-gray-400 font-medium uppercase tracking-wide">${scheme.company}</p>
+                            <h3 class="text-base font-semibold text-gray-900 mt-1 leading-snug">${scheme.scheme_name}</h3>
+                            <p class="text-xs text-gray-400 mt-2">${scheme.location ?? "Location not listed"} · ${scheme.salary ?? "Salary not listed"}</p>
                         </div>
-                        <span class="${scheme.status === 'Open' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'} text-xs font-medium px-3 py-1 rounded-full">
+                        <span class="${scheme.status === 'Open' ? 'bg-emerald-50 text-emerald-600 border border-emerald-100' : 'bg-red-50 text-red-500 border border-red-100'} text-xs font-medium px-2.5 py-1 rounded-full whitespace-nowrap">
                             ${scheme.status}
                         </span>
                     </div>
-                    <a href="${scheme.url}" target="_blank" class="inline-block mt-4 text-sm text-blue-600 hover:underline">View scheme →</a>
+                    <a href="${scheme.url}" target="_blank" class="inline-flex items-center gap-1 mt-4 text-xs font-medium text-gray-500 hover:text-gray-900 transition-colors">
+                        View scheme <span>→</span>
+                    </a>
                 `
                 document.getElementById("schemes-container").appendChild(card)
             })
