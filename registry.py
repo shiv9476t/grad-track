@@ -31,7 +31,7 @@ def run_all():
                 industry = classifier(scheme.scheme_name)
                 if isinstance(industry, list):
                     industry = ", ".join(industry)
-                db.update_industry(scheme_name, str(industry))
+                db.update_industry(scheme.scheme_name, str(industry))
         except Exception as e:
             logging.error(f"Scraper for {scraper.company_name} failed: {e}")
     
