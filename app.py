@@ -1,6 +1,11 @@
 from flask import Flask, jsonify, render_template, request
 from database import GradSchemeDB
 
+db = GradSchemeDB()
+if len(db.get_schemes()) == 0:
+    from registry import run_all
+    run_all()
+
 #creates web server
 app = Flask(__name__)
 
