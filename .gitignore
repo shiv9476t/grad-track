@@ -2,3 +2,4 @@ __pycache__/
 *.pyc
 companies2.json
 gradtrack.db
+.DS_Store
