@@ -19,7 +19,8 @@ class GradSchemeDB:
         salary TEXT,
         status TEXT,
         start_date DATE,
-        url TEXT UNIQUE)""")
+        url TEXT UNIQUE,
+        industry TEXT)""")
         
         self.conn.commit()
         
