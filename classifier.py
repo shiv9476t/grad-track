@@ -38,3 +38,4 @@ for row in scheme_names:
     if isinstance(industry, list):
         industry = ", ".join(industry)
     db.update_industry(scheme_name, str(industry))
+    

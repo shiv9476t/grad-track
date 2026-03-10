@@ -7,6 +7,8 @@ from scrapers.grant_thornton import GrantThorntonScraper
 from scrapers.mod import MODScraper
 from database import GradSchemeDB
 
+from classifier import classifier
+
 import logging
 
 logging.basicConfig(
@@ -24,8 +26,23 @@ def run_all():
         try:
             schemes = scraper.scrape_grad_schemes()
             logging.info(f"Scraped {len(schemes)} schemes from {scraper.company_name}")
-            for scheme in schemes:
+            for scheme in schemes: 
                 db.upsert_grad_scheme(scheme)
+                industry = classifier(scheme.scheme_name)
+                if isinstance(industry, list):
+                    industry = ", ".join(industry)
+                db.update_industry(scheme_name, str(industry))
         except Exception as e:
             logging.error(f"Scraper for {scraper.company_name} failed: {e}")
+    
+#def run_all():
+#    for ScraperClass in SCRAPERS:
+#        scraper = ScraperClass()
+#        try:
+#            schemes = scraper.scrape_grad_schemes()
+#            logging.info(f"Scraped {len(schemes)} schemes from {scraper.company_name}")
+#            for scheme in schemes:
+#                db.upsert_grad_scheme(scheme)
+#        except Exception as e:
+#            logging.error(f"Scraper for {scraper.company_name} failed: {e}")
     
