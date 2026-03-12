@@ -29,62 +29,65 @@ class CivilServiceScraper(BaseScraper):
                 continue
             grad_scheme = self.parse_grad_scheme_page(scheme_soup, url, salary, status)
             grad_scheme_list.append(grad_scheme)
-            
         return grad_scheme_list
     
     def extract_grad_scheme_links(self, data):
         scheme_urls = []
-        
         for scheme in data:
             url = scheme["link"]
             scheme_urls.append(url)
-            
         return scheme_urls
     
     def get_salary(self):
         salary = "Unknown"
         soup = self.get_parsed_html(self.salary_page_url)
-        div_list = soup.find_all("div", class_="card-item__content")
-        for div in div_list:
+        if soup is None:
+            return salary
+        for div in soup.find_all("div", class_="card-item__content"):
             h3 = div.find("h3")
-            if "starting salary" in h3.get_text(strip=True).lower():
-                p = div.find("p").get_text(strip=True)
-                salary = re.search(r"£[\d,]+", p).group()
+            if h3 and "starting salary" in h3.get_text(strip=True).lower():
+                p = div.find("p")
+                if p:
+                    salary_match = re.search(r"£[\d,]+", p.get_text(strip=True))
+                    if salary_match:
+                        salary = salary_match.group()
         return salary
     
     def get_status(self):
         status = "Unknown"
         soup = self.get_parsed_html(self.status_page_url)
-        h3 = soup.find("h3", class_="wp-block-heading").get_text(strip=True)
-        if "closed" in h3.lower():
-            status = "Closed"
-        else:
-            status = "Open"
-        
+        if soup is None:
+            return status
+        h3 = soup.find("h3", class_="wp-block-heading")
+        if h3:
+            if "closed" in h3.get_text(strip=True).lower():
+                status = "Closed"
+            else:
+                status = "Open"
         return status
     
     def parse_grad_scheme_page(self, soup, url, salary, status):
-        scheme_name = soup.find("title").get_text(strip=True).replace(" | Civil Service Careers", "")
+        title = soup.find("title")
+        scheme_name = title.get_text(strip=True).replace(" | Civil Service Careers", "") if title else "Unknown"
         
         location = None
-        status = status
         start_date = "September"
         
-        h3_list = soup.find_all("h3", class_="wp-block-heading")
-        for h3 in h3_list:
+        for h3 in soup.find_all("h3", class_="wp-block-heading"):
             if h3.get_text(strip=True) == "Location":
                 p = h3.find_next()
-                location = p.get_text(strip=True).split(".")[0]
+                if p:
+                    location = p.get_text(strip=True).split(".")[0]
                 
-        h2_list = soup.find_all("h2", class_="wp-block-heading")
-        for h2 in h2_list:
+        for h2 in soup.find_all("h2", class_="wp-block-heading"):
             if h2.get_text(strip=True) == "Location":
                 p = h2.find_next()
-                location = p.get_text(strip=True).split(".")[0]
+                if p:
+                    location = p.get_text(strip=True).split(".")[0]
                 
         status = self.normalise_status(status)
         
-        grad_scheme = GradScheme(
+        return GradScheme(
             company=self.company_name,
             scheme_name=scheme_name,
             location=location,
@@ -93,6 +96,3 @@ class CivilServiceScraper(BaseScraper):
             start_date=start_date,
             url=url
         )
-        
-        return grad_scheme
-
