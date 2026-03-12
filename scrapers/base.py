@@ -9,41 +9,51 @@ class BaseScraper:
     def __init__(self, company_name, base_url, delay=1):
         self.company_name = company_name
         self.base_url = base_url
-        #self.normalised_index_url = self.normalise_url(index_url)
         self.delay = delay
     
     def scrape_grad_schemes(self):
         raise NotImplementedError
         
     def get_parsed_html(self, url):
-        r = requests.get(url)
-        soup = BeautifulSoup(r.text, "html.parser")
-        time.sleep(self.delay)
-        return soup
+        try:
+            r = requests.get(url, timeout=10)
+            r.raise_for_status()
+            soup = BeautifulSoup(r.text, "html.parser")
+            time.sleep(self.delay)
+            return soup
+        except requests.RequestException:
+            return None
 
     def get_parsed_html_playwright(self, url, cookie_selector=None):
-        with sync_playwright() as p:
-            browser = p.chromium.launch(headless=False)
-            page = browser.new_page()
-            page.goto(url)
+        try:
+            with sync_playwright() as p:
+                browser = p.chromium.launch(headless=False)
+                page = browser.new_page()
+                page.goto(url)
 
-            if cookie_selector:
-                try:
-                    page.click(cookie_selector)
-                except:
-                    pass  # banner didn't appear, carry on
+                if cookie_selector:
+                    try:
+                        page.click(cookie_selector)
+                    except Exception:
+                        pass 
 
-            page.wait_for_selector("h1")
-            html = page.content()
-            browser.close()
-        soup = BeautifulSoup(html, "html.parser")
-        time.sleep(self.delay)
-        return soup
+                page.wait_for_selector("h1")
+                html = page.content()
+                browser.close()
+            soup = BeautifulSoup(html, "html.parser")
+            time.sleep(self.delay)
+            return soup
+        except Exception:
+            return None
     
     def get_json(self, url):
-        r = requests.get(url)
-        data = r.json()
-        return data
+        try:
+            r = requests.get(url, timeout=10)
+            r.raise_for_status()
+            data = r.json()
+            return data
+        except (requests.RequestException, ValueError):
+            return None
     
     def normalise_url(self, url):
         # Parse the URL

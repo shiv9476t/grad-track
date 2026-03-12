@@ -15,10 +15,14 @@ class MI5Scraper(BaseScraper):
     def scrape_grad_schemes(self):
         grad_scheme_list = []
         soup = self.get_parsed_html_playwright(self.index_url, cookie_selector="#ccc-notify-accept")
+        if soup is None:
+            return []
         scheme_urls = self.extract_grad_scheme_links(soup)
         
         for url in scheme_urls:
             scheme_soup = self.get_parsed_html_playwright(url, cookie_selector="#ccc-notify-accept")
+            if scheme_soup is None:
+                continue
             grad_scheme = self.parse_grad_scheme_page(scheme_soup, url)
             grad_scheme_list.append(grad_scheme)
             

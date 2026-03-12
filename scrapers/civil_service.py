@@ -18,11 +18,15 @@ class CivilServiceScraper(BaseScraper):
     def scrape_grad_schemes(self):
         grad_scheme_list = []
         data = self.get_json(self.API_endpoint)
+        if data is None:
+            return []
         scheme_urls = self.extract_grad_scheme_links(data)
         salary = self.get_salary()
         status = self.get_status()
         for url in scheme_urls:
             scheme_soup = self.get_parsed_html(url)
+            if scheme_soup is None:
+                continue
             grad_scheme = self.parse_grad_scheme_page(scheme_soup, url, salary, status)
             grad_scheme_list.append(grad_scheme)
             

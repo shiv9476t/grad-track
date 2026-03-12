@@ -15,10 +15,14 @@ class NetworkRailScraper(BaseScraper):
     def scrape_grad_schemes(self):
         grad_scheme_list = []
         soup = self.get_parsed_html(self.index_url)
+        if soup is None:
+            return []
         scheme_urls = self.extract_grad_scheme_links(soup)
         
         for url in scheme_urls:
             scheme_soup = self.get_parsed_html(url)
+            if scheme_soup is None:
+                continue
             grad_scheme = self.parse_grad_scheme_page(scheme_soup, url)
             grad_scheme_list.append(grad_scheme)
             

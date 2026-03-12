@@ -14,11 +14,13 @@ class MODScraper(BaseScraper):
     def scrape_grad_schemes(self):
         grad_scheme_list = []
         soup = self.get_parsed_html(self.index_url)
+        if soup is None:
+            return []
         schemes = self.extract_grad_scheme_links(soup)
-
         for url, status in schemes:
-            print(url)
             scheme_soup = self.get_parsed_html(url)
+            if scheme_soup is None:
+                 return []
             grad_scheme = self.parse_grad_scheme_page(scheme_soup, url, status)
             grad_scheme_list.append(grad_scheme)
         return grad_scheme_list
