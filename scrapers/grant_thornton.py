@@ -28,29 +28,29 @@ class GrantThorntonScraper(BaseScraper):
     def extract_grad_scheme_links(self, soup):
         schemes = []
         div = soup.find("div", class_="career-items")
+        if div is None:
+            return schemes
         for a in div.find_all("a"):
             href = a["href"]
             url = urljoin(self.base_url, href)
             schemes.append(url)
-    
         return schemes
 
     def parse_grad_scheme_page(self, soup, url):
-        scheme_name = soup.find("h1").get_text(strip=True) if soup.find("h1") else "Unknown"
+        h1 = soup.find("h1")
+        scheme_name = h1.get_text(strip=True) if h1 else "Unknown"
 
-        location = None
+        location = "Unknown"
         salary = "Competitive"
         status = "Unknown"
-        start_date = "Unknown"
+        start_date = "Not published"
 
         location_match = re.search(r" - ([A-Za-z\s]+)$", scheme_name)
         location = location_match.group(1).strip() if location_match else "Unknown"
 
-        # start date from scheme name e.g. "Autumn 2026"
         start_match = re.search(r"(Autumn|Spring|Summer|Winter)\s+\d{4}", scheme_name, re.I)
         start_date = start_match.group(0) if start_match else "Not published"
 
-        # status - apply link in main content
         main = soup.find("main") or soup
         apply_link = main.find("a", href=re.compile(r"apply", re.I))
         status = "Open" if apply_link else "Closed"
@@ -65,4 +65,4 @@ class GrantThorntonScraper(BaseScraper):
             status=status,
             start_date=start_date,
             url=url
-    )
+        )

@@ -20,7 +20,7 @@ class MODScraper(BaseScraper):
         for url, status in schemes:
             scheme_soup = self.get_parsed_html(url)
             if scheme_soup is None:
-                 return []
+                continue
             grad_scheme = self.parse_grad_scheme_page(scheme_soup, url, status)
             grad_scheme_list.append(grad_scheme)
         return grad_scheme_list

@@ -30,14 +30,14 @@ class NetworkRailScraper(BaseScraper):
     
     def extract_grad_scheme_links(self, soup):
         scheme_urls = []
-        
         for section in soup.find_all("section", class_="schemes"):
-            divs = section.find_all("div", class_="scheme-block")
-            for div in divs:
-                url = div.find("a", href=True)["href"]
-                scheme_urls.append(url)
+            for div in section.find_all("div", class_="scheme-block"):
+                a = div.find("a", href=True)
+                if a is None:
+                    continue
+                scheme_urls.append(a["href"])
         return scheme_urls
-    
+
     def parse_grad_scheme_page(self, soup, url):
         scheme_name = soup.find("h1").get_text(strip=True)
 
