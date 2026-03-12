@@ -1,7 +1,3 @@
-from database import GradSchemeDB
-
-db = GradSchemeDB()
-
 KEYWORDS = {
     "Technology": ["technology", "software", "data", "ai", "digital", "cyber", "it ", "engineering", "developer", "computing"],
     "Engineering": ["engineering", "mechanical", "electrical", "civil", "structural", "aerospace", "chemical"],
@@ -30,12 +26,5 @@ def classifier(scheme_name):
     
     return industry
 
-db.clear_industries()
-scheme_names = db.get_scheme_names()
-for row in scheme_names:
-    scheme_name = row["scheme_name"]
-    industry = classifier(scheme_name)
-    if isinstance(industry, list):
-        industry = ", ".join(industry)
-    db.update_industry(scheme_name, str(industry))
+
     

@@ -18,9 +18,8 @@ logging.basicConfig(
     
 SCRAPERS = [PwCScraper, LloydsScraper, MI5Scraper, CivilServiceScraper, NetworkRailScraper, GrantThorntonScraper, MODScraper]
 
-db = GradSchemeDB()
-
 def run_all():
+    db = GradSchemeDB()
     for ScraperClass in SCRAPERS:
         scraper = ScraperClass()
         try:
@@ -35,14 +34,5 @@ def run_all():
         except Exception as e:
             logging.error(f"Scraper for {scraper.company_name} failed: {e}")
     
-#def run_all():
-#    for ScraperClass in SCRAPERS:
-#        scraper = ScraperClass()
-#        try:
-#            schemes = scraper.scrape_grad_schemes()
-#            logging.info(f"Scraped {len(schemes)} schemes from {scraper.company_name}")
-#            for scheme in schemes:
-#                db.upsert_grad_scheme(scheme)
-#        except Exception as e:
-#            logging.error(f"Scraper for {scraper.company_name} failed: {e}")
+
     
